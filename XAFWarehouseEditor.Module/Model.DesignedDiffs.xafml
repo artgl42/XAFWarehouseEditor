@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application Title="XAFWarehouseEditor">
+  <BOModel>
+    <Class Name="DevExpress.Persistent.AuditTrail.BaseAuditedObjectWeakReference" DefaultListViewAllowEdit="False" />
+    <Class Name="DevExpress.Persistent.BaseImpl.PermissionPolicy.PermissionPolicyUser" Caption="Base User" />
+    <Class Name="XAFWarehouseEditor.Module.BusinessObjects.Picket">
+      <AppearanceRules>
+        <AppearanceRule Id="PicketStatusUnusedGreen" BackColor="Lime" Criteria="[PicketStatus] = ##Enum#XAFWarehouseEditor.Module.BusinessObjects.Status,Unused#" TargetItems="*" Context="ListView" IsNewNode="True" />
+        <AppearanceRule Id="PicketStatusUsedRed" BackColor="Red" Criteria="[PicketStatus] = ##Enum#XAFWarehouseEditor.Module.BusinessObjects.Status,Used#" TargetItems="*" Context="ListView" IsNewNode="True" />
+      </AppearanceRules>
+      <OwnMembers>
+        <Member Name="PicketNumber" EditMask="###" DisplayFormat="{0:N0}" />
+      </OwnMembers>
+    </Class>
+    <Class Name="XAFWarehouseEditor.Module.BusinessObjects.Platform">
+      <OwnMembers>
+        <Member Name="PlatformNumber" LookupEditorMode="Auto" EditMask="\d{0,3}|(\d{0,3}\-\d{0,3})" EditMaskType="RegEx" DisplayFormat="" />
+      </OwnMembers>
+    </Class>
+    <Class Name="XAFWarehouseEditor.Module.BusinessObjects.PlatformCargoLog">
+      <OwnMembers>
+        <Member Name="AssignedToPlatform" LookupProperty="PlatformNumber" />
+        <Member Name="CreateTime" DisplayFormat="{0:G}" EditMask="G" />
+        <Member Name="DeleteTime" DisplayFormat="{0:G}" EditMask="G" />
+      </OwnMembers>
+    </Class>
+    <Class Name="XAFWarehouseEditor.Module.BusinessObjects.PlatformPicketsLog">
+      <AppearanceRules>
+        <AppearanceRule Id="DeleteTimeIsNullBold" FontStyle="Bold" TargetItems="*" Criteria="[DeleteTime] Is Null" IsNewNode="True" />
+      </AppearanceRules>
+      <OwnMembers>
+        <Member Name="AssignedToPlatform" LookupProperty="PlatformNumber" Index="0" />
+        <Member Name="AssignedToPicket" LookupProperty="PicketNumber" />
+        <Member Name="CreateTime" DisplayFormat="{0:G}" EditMask="G" />
+        <Member Name="DeleteTime" DisplayFormat="{0:G}" EditMask="G" />
+      </OwnMembers>
+    </Class>
+  </BOModel>
+  <CreatableItems>
+    <CreatableItem ClassName="XAFWarehouseEditor.Module.BusinessObjects.Warehouse" ImageName="BO_Unknown" />
+  </CreatableItems>
+  <NavigationItems NavigationStyle="Accordion" DefaultLeafImageName="BO_Unknown" StartupNavigationItem="PlatformCargoLog_ListView">
+    <Items>
+      <Item Id="Default" Caption="Default" ImageName="BO_Folder" Index="0">
+        <Items>
+          <Item Id="Picket_ListView" Removed="True" />
+          <Item Id="Platform_ListView" Removed="True" />
+          <Item Id="PlatformCargoLog_ListView" Removed="True" />
+          <Item Id="PlatformPicketsLog_ListView" Removed="True" />
+          <Item Id="Warehouse_ListView" Removed="True" />
+        </Items>
+      </Item>
+      <Item Id="Warehouse Editor" Caption="Warehouse Editor" ImageName="BO_Folder" Index="1" IsNewNode="True">
+        <Items IsNewNode="True">
+          <Item Id="Warehouse_ListView" ViewId="Warehouse_ListView" ObjectKey="" Index="0" ImageName="BO_Unknown" IsNewNode="True" />
+          <Item Id="Picket_ListView" ViewId="Picket_ListView" ObjectKey="" Index="1" IsNewNode="True" />
+          <Item Id="Platform_ListView" ViewId="Platform_ListView" ObjectKey="" Index="2" IsNewNode="True" />
+        </Items>
+      </Item>
+      <Item Id="Warehouse Logs" Caption="Warehouse Logs" ImageName="BO_Folder" Index="2" IsNewNode="True">
+        <Items IsNewNode="True">
+          <Item Id="PlatformPicketsLog_ListView" ViewId="PlatformPicketsLog_ListView" ObjectKey="" Index="0" IsNewNode="True" />
+          <Item Id="PlatformCargoLog_ListView" ViewId="PlatformCargoLog_ListView" ObjectKey="" Index="1" IsNewNode="True" />
+        </Items>
+      </Item>
+      <Item Id="Audit Logs" Caption="Audit Logs" Index="3" IsNewNode="True">
+        <Items IsNewNode="True">
+          <Item Id="Audit Event" ViewId="AuditDataItemPersistent_ListView" IsNewNode="True" />
+        </Items>
+      </Item>
+    </Items>
+  </NavigationItems>
+  <Options>
+    <Dashboards EnableCreation="False" />
+    <LayoutManagerOptions RequiredFieldMark="*" />
+  </Options>
+  <SchemaModules>
+    <SchemaModule Name="SystemModule" Version="22.1.4.0" IsNewNode="True" />
+  </SchemaModules>
+  <Views>
+    <ListView Id="ApplicationUser_ListView" Caption="Users" />
+    <DetailView Id="Picket_DetailView" EnableLayoutGroupImages="True" FreezeLayout="False" />
+    <DetailView Id="PlatformPicketsLog_DetailView">
+      <Items>
+        <PropertyEditor Id="AssignedToPicket" DataSourceCriteria="[PicketStatus] = ##Enum#XAFWarehouseEditor.Module.BusinessObjects.Status,Unused#" />
+      </Items>
+      <Layout>
+        <LayoutGroup Id="Main" RelativeSize="100">
+          <LayoutGroup Id="SimpleEditors" RelativeSize="100">
+            <LayoutGroup Id="PlatformPicketsLog" ShowCaption="False" Index="0" RelativeSize="100" IsNewNode="True" Removed="True">
+              <LayoutGroup Id="Item3" ShowCaption="True" Caption="Platform" CaptionLocation="Top" Index="0" RelativeSize="6.9852941176470589" IsNewNode="True">
+                <LayoutItem Id="AssignedToPlatform" ViewItem="AssignedToPlatform" Index="0" RelativeSize="100" IsNewNode="True" />
+              </LayoutGroup>
+              <LayoutGroup Id="Item2" ShowCaption="True" Caption="Select Picket" CaptionLocation="Top" Index="1" RelativeSize="7.965686274509804" IsNewNode="True">
+                <LayoutItem Id="AssignedToPicket" ViewItem="AssignedToPicket" Index="0" RelativeSize="100" IsNewNode="True" />
+              </LayoutGroup>
+              <LayoutGroup Id="Item1" ShowCaption="True" CaptionLocation="Top" Direction="Horizontal" Index="2" RelativeSize="85.049019607843135" Caption="Date" IsNewNode="True">
+                <LayoutItem Id="CreateTime" ViewItem="CreateTime" Index="0" RelativeSize="49.934469200524248" IsNewNode="True" />
+                <LayoutItem Id="DeleteTime" ViewItem="DeleteTime" Index="1" RelativeSize="50.065530799475752" IsNewNode="True" />
+              </LayoutGroup>
+            </LayoutGroup>
+          </LayoutGroup>
+        </LayoutGroup>
+      </Layout>
+    </DetailView>
+  </Views>
+</Application>
